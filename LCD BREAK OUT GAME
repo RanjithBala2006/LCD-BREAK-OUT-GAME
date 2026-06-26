@@ -1,0 +1,48 @@
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+int paddlePos = 7;
+int ballPos = 0;
+int ballDir = 1;
+
+const int leftBtn = 8;
+const int rightBtn = 9;
+
+void setup() {
+  pinMode(leftBtn, INPUT_PULLUP);
+  pinMode(rightBtn, INPUT_PULLUP);
+
+  lcd.begin(16, 2);
+}
+
+void loop() {
+  // Move paddle
+  if (digitalRead(leftBtn) == LOW && paddlePos > 0) {
+    paddlePos--;
+  }
+
+  if (digitalRead(rightBtn) == LOW && paddlePos < 15) {
+    paddlePos++;
+  }
+
+  // Clear display
+  lcd.clear();
+
+  // Display ball on first row
+  lcd.setCursor(ballPos, 0);
+  lcd.print("O");
+
+  // Display paddle on second row
+  lcd.setCursor(paddlePos, 1);
+  lcd.print("=");
+
+  delay(200);
+
+  // Move ball
+  ballPos += ballDir;
+
+  if (ballPos >= 15 || ballPos <= 0) {
+    ballDir = -ballDir;
+  }
+}
